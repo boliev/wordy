@@ -4,9 +4,11 @@ import (
 	"github.com/boliev/wordy/internal/controller"
 	"github.com/boliev/wordy/internal/domain"
 	"github.com/boliev/wordy/internal/psql"
+	"github.com/boliev/wordy/pkg/config"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"log"
 )
 
 // App the app
@@ -15,7 +17,8 @@ type App struct {
 
 // Start the app
 func (app App) Start() {
-	db := initDB()
+	cfg := createConfig()
+	db := initDB(cfg.GetString("database_dsn"))
 	r := gin.Default()
 	v1 := r.Group("/v1")
 	{
@@ -31,8 +34,7 @@ func (app App) Start() {
 	r.Run()
 }
 
-func initDB() *gorm.DB {
-	dsn := "host=localhost user=wordy password=123456 dbname=wordy port=5432 sslmode=disable TimeZone=Europe/Berlin"
+func initDB(dsn string) *gorm.DB {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("cannot connect to database")
@@ -45,4 +47,13 @@ func initDB() *gorm.DB {
 	}
 
 	return db
+}
+
+func createConfig() *config.Config {
+	cfg, err := config.NewConfig()
+	if err != nil {
+		log.Panicf(err.Error())
+	}
+
+	return cfg
 }
