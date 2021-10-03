@@ -11,7 +11,7 @@ type User struct {
 // CreateUserFromDomain creates user response from domain user
 func CreateUserFromDomain(user *domain.User) *User {
 	return &User{
-		ID:    user.ID,
+		ID:    int(user.ID),
 		Email: user.Email,
 	}
 }

@@ -1,8 +1,10 @@
 package domain
 
+import "gorm.io/gorm"
+
 // User domain model
 type User struct {
-	ID       int
+	gorm.Model
 	Email    string
 	Password string
 }
