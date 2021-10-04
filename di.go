@@ -5,6 +5,7 @@ import (
 	"github.com/boliev/wordy/internal/domain"
 	"github.com/boliev/wordy/internal/psql"
 	"github.com/boliev/wordy/internal/repository"
+	"github.com/boliev/wordy/internal/user"
 	"github.com/boliev/wordy/pkg/config"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
@@ -40,9 +41,14 @@ func DiCreateUserRepository(db *gorm.DB) repository.User {
 	return psql.CreateUserRepository(db)
 }
 
+// DiCreateUserCreator di function for user creator
+func DiCreateUserCreator(userRepository repository.User) *user.Creator {
+	return user.CreateUserCreator(userRepository)
+}
+
 // DiCreateUserController di function for user controller
-func DiCreateUserController(userRepository repository.User) *controller.User {
-	return controller.CreateUserController(userRepository)
+func DiCreateUserController(userRepository repository.User, userCreator *user.Creator) *controller.User {
+	return controller.CreateUserController(userRepository, userCreator)
 }
 
 // DiCreateApp di function for app
