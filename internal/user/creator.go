@@ -4,7 +4,6 @@ import (
 	"github.com/boliev/wordy/internal/domain"
 	"github.com/boliev/wordy/internal/repository"
 	"github.com/boliev/wordy/internal/request"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // Creator creates a user from request
@@ -12,14 +11,16 @@ type Creator struct {
 	userRepository repository.User
 }
 
+// CreateUserCreator Creator constructor
 func CreateUserCreator(userRepository repository.User) *Creator {
 	return &Creator{
 		userRepository: userRepository,
 	}
 }
 
+// Create a user
 func (c Creator) Create(request request.UserCreation) (*domain.User, error) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), 8)
+	hashedPassword, err := hashPassword(request.Password)
 	if err != nil {
 		return nil, err
 	}

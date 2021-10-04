@@ -46,9 +46,24 @@ func DiCreateUserCreator(userRepository repository.User) *user.Creator {
 	return user.CreateUserCreator(userRepository)
 }
 
+// DiCreateJwtService di function for jwtService
+func DiCreateJwtService(cfg *config.Config) *user.JwtService {
+	return user.CreateJwtService(cfg.GetString("jwt_secret"), cfg.GetInt("jwt_token_days"))
+}
+
+// DiCreateUserAuthenticator di function for user authenticator
+func DiCreateUserAuthenticator(userRepository repository.User, jwtService *user.JwtService) *user.Authenticator {
+	return user.CreateUserAuthenticator(userRepository, jwtService)
+}
+
 // DiCreateUserController di function for user controller
 func DiCreateUserController(userRepository repository.User, userCreator *user.Creator) *controller.User {
 	return controller.CreateUserController(userRepository, userCreator)
+}
+
+// DiCreateAuthController di function for auth controller
+func DiCreateAuthController(authenticator *user.Authenticator) *controller.Auth {
+	return controller.CreateAuthController(authenticator)
 }
 
 // DiCreateApp di function for app
@@ -57,11 +72,13 @@ func DiCreateApp(
 	db *gorm.DB,
 	userRepository repository.User,
 	userController *controller.User,
+	authController *controller.Auth,
 ) *App {
 	return &App{
 		Cfg:            cfg,
 		Db:             db,
 		UserRepository: userRepository,
 		UserController: userController,
+		AuthController: authController,
 	}
 }

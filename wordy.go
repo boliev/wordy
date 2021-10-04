@@ -14,6 +14,7 @@ type App struct {
 	Db             *gorm.DB
 	UserRepository repository.User
 	UserController *controller.User
+	AuthController *controller.Auth
 }
 
 // Start the app
@@ -26,6 +27,11 @@ func (app App) Start() {
 			users.GET("/", app.UserController.List)
 			users.GET("/:id", app.UserController.One)
 			users.POST("/", app.UserController.Create)
+		}
+
+		auth := v1.Group("/auth")
+		{
+			auth.POST("/", app.AuthController.Auth)
 		}
 	}
 	err := r.Run()

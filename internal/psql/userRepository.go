@@ -42,3 +42,14 @@ func (r *UserRepository) FindAll() []*domain.User {
 
 	return users
 }
+
+// FindByEmail get user by email
+func (r *UserRepository) FindByEmail(email string) (*domain.User, error) {
+	var user domain.User
+	result := r.db.Where("email = ?", email).First(&user)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &user, nil
+}

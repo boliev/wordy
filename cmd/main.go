@@ -22,7 +22,11 @@ func buildContainer() *dig.Container {
 	provide(container, wordy.DiCreateDB)
 	provide(container, wordy.DiCreateUserRepository)
 	provide(container, wordy.DiCreateUserCreator)
+	provide(container, wordy.DiCreateJwtService)
+	provide(container, wordy.DiCreateUserAuthenticator)
+
 	provide(container, wordy.DiCreateUserController)
+	provide(container, wordy.DiCreateAuthController)
 
 	provide(container, wordy.DiCreateApp)
 

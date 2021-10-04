@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-// User struct
+// User controller struct
 type User struct {
 	userRepository repository.User
 	userCreator    *user.Creator

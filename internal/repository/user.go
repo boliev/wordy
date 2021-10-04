@@ -7,4 +7,5 @@ type User interface {
 	Create(user *domain.User) error
 	Find(id int) (*domain.User, error)
 	FindAll() []*domain.User
+	FindByEmail(email string) (*domain.User, error)
 }
