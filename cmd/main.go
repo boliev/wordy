@@ -27,6 +27,7 @@ func buildContainer() *dig.Container {
 
 	provide(container, wordy.DiCreateUserController)
 	provide(container, wordy.DiCreateAuthController)
+	provide(container, wordy.DiCreateAuthHandler)
 
 	provide(container, wordy.DiCreateApp)
 

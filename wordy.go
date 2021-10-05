@@ -2,17 +2,13 @@ package wordy
 
 import (
 	"github.com/boliev/wordy/internal/controller"
-	"github.com/boliev/wordy/internal/repository"
-	"github.com/boliev/wordy/pkg/config"
+	"github.com/boliev/wordy/internal/middleware"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 // App the app
 type App struct {
-	Cfg            *config.Config
-	Db             *gorm.DB
-	UserRepository repository.User
+	AuthHandler    *middleware.AuthHandler
 	UserController *controller.User
 	AuthController *controller.Auth
 }
@@ -24,8 +20,8 @@ func (app App) Start() {
 	{
 		users := v1.Group("/users")
 		{
-			users.GET("/", app.UserController.List)
-			users.GET("/:id", app.UserController.One)
+			users.GET("/", app.AuthHandler.Handle, app.UserController.List)
+			users.GET("/:id", app.AuthHandler.Handle, app.UserController.One)
 			users.POST("/", app.UserController.Create)
 		}
 

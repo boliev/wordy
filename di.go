@@ -3,6 +3,7 @@ package wordy
 import (
 	"github.com/boliev/wordy/internal/controller"
 	"github.com/boliev/wordy/internal/domain"
+	"github.com/boliev/wordy/internal/middleware"
 	"github.com/boliev/wordy/internal/psql"
 	"github.com/boliev/wordy/internal/repository"
 	"github.com/boliev/wordy/internal/user"
@@ -66,19 +67,20 @@ func DiCreateAuthController(authenticator *user.Authenticator) *controller.Auth 
 	return controller.CreateAuthController(authenticator)
 }
 
+// DiCreateAuthHandler di function for auth handler
+func DiCreateAuthHandler(jwtService *user.JwtService) *middleware.AuthHandler {
+	return middleware.CreateAuthHandler(jwtService)
+}
+
 // DiCreateApp di function for app
 func DiCreateApp(
-	cfg *config.Config,
-	db *gorm.DB,
-	userRepository repository.User,
 	userController *controller.User,
 	authController *controller.Auth,
+	authHandler *middleware.AuthHandler,
 ) *App {
 	return &App{
-		Cfg:            cfg,
-		Db:             db,
-		UserRepository: userRepository,
 		UserController: userController,
 		AuthController: authController,
+		AuthHandler:    authHandler,
 	}
 }

@@ -58,7 +58,7 @@ func (j JwtService) Parse(tokenString string) (int, error) {
 		return 0, fmt.Errorf("wrong token")
 	}
 
-	return id.(int), nil
+	return int(id.(float64)), nil
 }
 
 func (j JwtService) parseClaims(tokenString string) (jwt.MapClaims, error) {
