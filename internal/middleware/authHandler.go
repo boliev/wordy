@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// AuthHandler struct
 type AuthHandler struct {
 	JwtParser user.JwtParser
 }
@@ -16,12 +17,14 @@ type authHeader struct {
 	Token string `header:"Authorization"`
 }
 
+// CreateAuthHandler AuthHandler constructor
 func CreateAuthHandler(JwtParser user.JwtParser) *AuthHandler {
 	return &AuthHandler{
 		JwtParser: JwtParser,
 	}
 }
 
+// Handle function
 func (a AuthHandler) Handle(c *gin.Context) {
 	header := &authHeader{}
 	err := c.ShouldBindHeader(&header)
@@ -35,11 +38,11 @@ func (a AuthHandler) Handle(c *gin.Context) {
 
 	idTokenHeader := strings.Split(header.Token, "Bearer ")
 
-	userId, err := a.JwtParser.Parse(idTokenHeader[1])
+	userID, err := a.JwtParser.Parse(idTokenHeader[1])
 
 	if err != nil {
 		c.AbortWithStatus(http.StatusForbidden)
 	}
 
-	c.Set("userId", userId)
+	c.Set("userID", userID)
 }
