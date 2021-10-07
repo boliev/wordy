@@ -9,14 +9,14 @@ import (
 // Authenticator struct
 type Authenticator struct {
 	userRepository repository.User
-	jwtService     *JwtService
+	jwtCreator     JwtCreator
 }
 
 // CreateUserAuthenticator Authenticator constructor
-func CreateUserAuthenticator(userRepository repository.User, jwtService *JwtService) *Authenticator {
+func CreateUserAuthenticator(userRepository repository.User, jwtCreator JwtCreator) *Authenticator {
 	return &Authenticator{
 		userRepository: userRepository,
-		jwtService:     jwtService,
+		jwtCreator:     jwtCreator,
 	}
 }
 
@@ -32,7 +32,7 @@ func (a Authenticator) Auth(email string, password string) (*domain.UserAuth, er
 		return nil, fmt.Errorf("no such user")
 	}
 
-	auth, err := a.jwtService.Create(int(usr.ID))
+	auth, err := a.jwtCreator.Create(int(usr.ID))
 	if err != nil {
 		return nil, err
 	}
